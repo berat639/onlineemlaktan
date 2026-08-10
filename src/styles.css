@@ -148,7 +148,15 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+  --brand: oklch(0.72 0.17 45);
+  --brand-foreground: oklch(0.18 0.02 60);
+  --brand-soft: oklch(0.3 0.06 50);
+  --success: oklch(0.72 0.14 155);
+  --success-soft: oklch(0.3 0.05 155);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 40%);
+  --shadow-card-hover: 0 12px 32px -14px oklch(0 0 0 / 60%);
 }
+
 
 @layer base {
   * {
