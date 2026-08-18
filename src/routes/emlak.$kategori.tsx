@@ -9,16 +9,27 @@ import { getCategory, listingsByCategory } from "@/data/listings";
 
 const str = (v: unknown) => (typeof v === "string" && v.length > 0 ? v : undefined);
 
+export type ListingSearch = {
+  q?: string;
+  il?: string;
+  ilce?: string;
+  min?: string;
+  max?: string;
+  minM2?: string;
+  maxM2?: string;
+  oda?: string;
+};
+
 export const Route = createFileRoute("/emlak/$kategori")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    q: str(search.q),
-    il: str(search.il),
-    ilce: str(search.ilce),
-    min: str(search.min),
-    max: str(search.max),
-    minM2: str(search.minM2),
-    maxM2: str(search.maxM2),
-    oda: str(search.oda),
+  validateSearch: (search: Record<string, unknown>): ListingSearch => ({
+    q: str(search["q"]),
+    il: str(search["il"]),
+    ilce: str(search["ilce"]),
+    min: str(search["min"]),
+    max: str(search["max"]),
+    minM2: str(search["minM2"]),
+    maxM2: str(search["maxM2"]),
+    oda: str(search["oda"]),
   }),
   loader: ({ params }) => {
     const category = getCategory(params.kategori);
