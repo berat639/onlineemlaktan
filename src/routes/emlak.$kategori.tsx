@@ -3,10 +3,34 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CategorySidebar } from "@/components/CategorySidebar";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
 import { ListingGrid } from "@/components/ListingGrid";
 import { getCategory, listingsByCategory } from "@/data/listings";
 
+const str = (v: unknown) => (typeof v === "string" && v.length > 0 ? v : undefined);
+
+export type ListingSearch = {
+  q?: string | undefined;
+  il?: string | undefined;
+  ilce?: string | undefined;
+  min?: string | undefined;
+  max?: string | undefined;
+  minM2?: string | undefined;
+  maxM2?: string | undefined;
+  oda?: string | undefined;
+};
+
 export const Route = createFileRoute("/emlak/$kategori")({
+  validateSearch: (search: Record<string, unknown>): ListingSearch => ({
+    q: str(search["q"]),
+    il: str(search["il"]),
+    ilce: str(search["ilce"]),
+    min: str(search["min"]),
+    max: str(search["max"]),
+    minM2: str(search["minM2"]),
+    maxM2: str(search["maxM2"]),
+    oda: str(search["oda"]),
+  }),
   loader: ({ params }) => {
     const category = getCategory(params.kategori);
     if (!category) throw notFound();
@@ -36,7 +60,24 @@ const selectClass =
 
 function CategoryPage() {
   const { category } = Route.useLoaderData();
-  const all = listingsByCategory(category.slug);
+  const sp = Route.useSearch();
+  const base = listingsByCategory(category.slug);
+
+  const all = useMemo(() => {
+    const odalar = sp.oda ? sp.oda.split(",") : [];
+    const q = sp.q?.toLocaleLowerCase("tr");
+    return base.filter((l) => {
+      if (sp.il && l.city !== sp.il) return false;
+      if (sp.ilce && l.district !== sp.ilce) return false;
+      if (sp.min && l.price < Number(sp.min)) return false;
+      if (sp.max && l.price > Number(sp.max)) return false;
+      if (sp.minM2 && l.area < Number(sp.minM2)) return false;
+      if (sp.maxM2 && l.area > Number(sp.maxM2)) return false;
+      if (odalar.length && !odalar.some((o) => (l.rooms ?? "").includes(o))) return false;
+      if (q && !`${l.title} ${l.district} ${l.city} ${l.id}`.toLocaleLowerCase("tr").includes(q)) return false;
+      return true;
+    });
+  }, [base, sp]);
 
   const [type, setType] = useState("hepsi");
   const [city, setCity] = useState("hepsi");
@@ -74,6 +115,7 @@ function CategoryPage() {
         <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
           <aside className="lg:sticky lg:top-20 lg:self-start">
             <CategorySidebar />
+            <AdvancedSearch />
           </aside>
 
           <div className="space-y-4">
