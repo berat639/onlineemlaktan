@@ -52,20 +52,16 @@ export function AdvancedSearch() {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate({
-      to: "/emlak/$kategori",
-      params: { kategori: activeSlug },
-      search: {
-        q: q || undefined,
-        il: il || undefined,
-        ilce: ilce || undefined,
-        min: minPrice || undefined,
-        max: maxPrice || undefined,
-        minM2: minArea || undefined,
-        maxM2: maxArea || undefined,
-        oda: oda.length ? oda.join(",") : undefined,
-      },
-    });
+    const search: Record<string, string> = {};
+    if (q) search["q"] = q;
+    if (il) search["il"] = il;
+    if (ilce) search["ilce"] = ilce;
+    if (minPrice) search["min"] = minPrice;
+    if (maxPrice) search["max"] = maxPrice;
+    if (minArea) search["minM2"] = minArea;
+    if (maxArea) search["maxM2"] = maxArea;
+    if (oda.length) search["oda"] = oda.join(",");
+    navigate({ to: "/emlak/$kategori", params: { kategori: activeSlug }, search });
   };
 
   return (

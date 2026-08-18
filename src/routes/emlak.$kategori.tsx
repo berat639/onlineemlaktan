@@ -10,14 +10,14 @@ import { getCategory, listingsByCategory } from "@/data/listings";
 const str = (v: unknown) => (typeof v === "string" && v.length > 0 ? v : undefined);
 
 export type ListingSearch = {
-  q?: string;
-  il?: string;
-  ilce?: string;
-  min?: string;
-  max?: string;
-  minM2?: string;
-  maxM2?: string;
-  oda?: string;
+  q?: string | undefined;
+  il?: string | undefined;
+  ilce?: string | undefined;
+  min?: string | undefined;
+  max?: string | undefined;
+  minM2?: string | undefined;
+  maxM2?: string | undefined;
+  oda?: string | undefined;
 };
 
 export const Route = createFileRoute("/emlak/$kategori")({
