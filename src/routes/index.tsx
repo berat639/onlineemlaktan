@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CategorySidebar } from "@/components/CategorySidebar";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
 import { ListingGrid } from "@/components/ListingGrid";
 import { listings } from "@/data/listings";
 
@@ -40,6 +41,7 @@ function Index() {
         <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
           <aside className="lg:sticky lg:top-20 lg:self-start">
             <CategorySidebar />
+            <AdvancedSearch />
           </aside>
 
           <div className="space-y-8">
